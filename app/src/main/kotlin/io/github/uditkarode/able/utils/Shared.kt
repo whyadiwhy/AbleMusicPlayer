@@ -247,7 +247,8 @@ class Shared {
                             retList.add(Song(
                                 name=file.name,
                                 artist=dir.name,
-                                ftpFile="$path/${dir.name}/${file.name}"
+                                ftpFile="$path/${dir.name}/${file.name}",
+                                ftpBufLen = file.size
                             ))
                         }
                     }

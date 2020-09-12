@@ -47,6 +47,7 @@ import io.github.uditkarode.able.events.*
 import io.github.uditkarode.able.models.Song
 import io.github.uditkarode.able.models.SongState
 import io.github.uditkarode.able.utils.Constants
+import io.github.uditkarode.able.utils.FtpDataSource
 import io.github.uditkarode.able.utils.Shared
 import kotlinx.coroutines.*
 import org.greenrobot.eventbus.EventBus
@@ -405,12 +406,10 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, Corouti
             try {
                 if(current.filePath != "") mediaPlayer.setDataSource(current.filePath)
                 else {
-                    val cacheFile = File(cacheDir, "ftpStream")
-                    if(cacheFile.exists()) cacheFile.delete()
-                    Shared.fc.retrieveFile(current.ftpFile, FileOutputStream(cacheFile))
-                    val fis = FileInputStream(cacheFile)
-                    mediaPlayer.setDataSource(fis.fd)
-                    fis.close()
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        val sis = Shared.fc.retrieveFileStream(current.ftpFile)
+                        mediaPlayer.setDataSource(FtpDataSource(sis, current.ftpBufLen!!,current.ftpFile))
+                    }
                 }
                 mediaPlayer.prepareAsync()
                 EventBus.getDefault().post(GetSongChangedEvent())
