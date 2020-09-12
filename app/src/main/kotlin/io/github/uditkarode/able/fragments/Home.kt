@@ -143,9 +143,10 @@ class Home : Fragment(), CoroutineScope {
 
         bindEvent()
 
-        launch {
+        launch(Dispatchers.IO){
             songList = Shared.getSongList(Constants.ableSongDir)
             songList.addAll(Shared.getLocalSongs(requireContext()))
+            songList.addAll(Shared.getSongsFromFtp("ubuntu", "xxx", "52.66.19.15", "/home/ubuntu/Music"))
             if (songList.isNotEmpty()) songList = ArrayList(songList.sortedBy {
                 it.name.toUpperCase(
                     Locale.getDefault()

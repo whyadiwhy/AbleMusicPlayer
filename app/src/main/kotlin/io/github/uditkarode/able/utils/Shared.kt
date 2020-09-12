@@ -43,6 +43,8 @@ import io.github.uditkarode.able.services.MusicService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.apache.commons.net.ftp.FTP
+import org.apache.commons.net.ftp.FTPClient
 import org.jaudiotagger.audio.AudioFile
 import org.jaudiotagger.audio.AudioFileIO
 import org.jaudiotagger.tag.FieldKey
@@ -62,6 +64,8 @@ class Shared {
          *  the MainActivity in a session.
          * */
         var isFirstOpen = true
+
+        val fc = FTPClient()
 
         lateinit var fetch: Fetch
         var bmp: Bitmap? = null
@@ -220,6 +224,39 @@ class Shared {
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
             }
+        }
+
+        /**
+         * Get songs from an FTP server
+         */
+        fun getSongsFromFtp(username: String, password: String, ip: String, path: String): ArrayList<Song> {
+            Log.e("yes", "Starting to get stuff")
+            val retList = arrayListOf<Song>()
+
+            try {
+                fc.connect(ip)
+                fc.login(username, password)
+                fc.changeWorkingDirectory(path)
+                fc.setFileType(FTP.BINARY_FILE_TYPE)
+
+
+                for(dir in fc.listDirectories()){
+                    fc.changeWorkingDirectory("$path/${dir.name}")
+                    for(file in fc.listFiles()){
+                        if(file.isFile){
+                            retList.add(Song(
+                                name=file.name,
+                                artist=dir.name,
+                                ftpFile="$path/${dir.name}/${file.name}"
+                            ))
+                        }
+                    }
+                }
+            } catch(e: java.lang.Exception){
+                Log.e("RIP", e.toString())
+            }
+
+            return retList
         }
 
         /**

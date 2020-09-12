@@ -52,6 +52,8 @@ import kotlinx.coroutines.*
 import org.greenrobot.eventbus.EventBus
 import org.schabi.newpipe.extractor.stream.StreamInfo
 import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.lang.ref.WeakReference
 import java.lang.reflect.Field
 import java.util.*
@@ -389,18 +391,27 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener, Corouti
      * changes the current song to playQueue[currentIndex] and starts playing it.
      */
     private fun songChanged() {
+        val current = playQueue[currentIndex]
         if (!isInstantiated) isInstantiated = true
         else {
             if (mediaPlayer.isPlaying) mediaPlayer.stop()
             mediaPlayer.reset()
         }
-        if (playQueue[currentIndex].filePath == "") {
+        if (current.filePath == "" && current.ftpFile == null) {
             launch {
                 streamAudio()
             }
         } else {
             try {
-                mediaPlayer.setDataSource(playQueue[currentIndex].filePath)//Inside Try To Handle in case File is not found but still shows in songList
+                if(current.filePath != "") mediaPlayer.setDataSource(current.filePath)
+                else {
+                    val cacheFile = File(cacheDir, "ftpStream")
+                    if(cacheFile.exists()) cacheFile.delete()
+                    Shared.fc.retrieveFile(current.ftpFile, FileOutputStream(cacheFile))
+                    val fis = FileInputStream(cacheFile)
+                    mediaPlayer.setDataSource(fis.fd)
+                    fis.close()
+                }
                 mediaPlayer.prepareAsync()
                 EventBus.getDefault().post(GetSongChangedEvent())
                 EventBus.getDefault().post(GetIndexEvent(currentIndex))
