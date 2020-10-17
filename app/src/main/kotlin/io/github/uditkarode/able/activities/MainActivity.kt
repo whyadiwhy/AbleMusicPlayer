@@ -31,7 +31,6 @@ import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
 import android.os.*
 import android.text.Html
-import android.util.Log
 import android.view.TouchDelegate
 import android.view.View
 import android.widget.Toast
@@ -40,7 +39,6 @@ import androidx.core.text.HtmlCompat
 import androidx.preference.PreferenceManager
 import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
-import com.flurry.android.FlurryAgent
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.github.inflationx.calligraphy3.CalligraphyConfig
 import io.github.inflationx.calligraphy3.CalligraphyInterceptor
@@ -57,7 +55,6 @@ import io.github.uditkarode.able.services.DownloadService
 import io.github.uditkarode.able.services.DownloadService.Companion.enqueueDownload
 import io.github.uditkarode.able.services.MusicService
 import io.github.uditkarode.able.services.ServiceResultReceiver
-import io.github.uditkarode.able.utils.Constants
 import io.github.uditkarode.able.utils.CustomDownloader
 import io.github.uditkarode.able.utils.MusicClientActivity
 import io.github.uditkarode.able.utils.Shared
@@ -117,10 +114,6 @@ class MainActivity : MusicClientActivity(), Search.SongCallback, ServiceResultRe
             okClient = OkHttpClient()
             mServiceResultReceiver = ServiceResultReceiver(Handler(Looper.getMainLooper()))
             mServiceResultReceiver.setReceiver(this@MainActivity)
-
-            FlurryAgent.Builder()
-                .withLogEnabled(false)
-                .build(this@MainActivity, Constants.FLURRY_KEY)
         }
 
         super.onCreate(savedInstanceState)

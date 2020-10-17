@@ -53,7 +53,6 @@ class Constants {
         /**
          * API keys and version code names which *should* be replaced during compilation.
          */
-        const val FLURRY_KEY = "INSERT_FLURRY_KEY"
         const val RAPID_API_KEY= "INSERT_RAPID_KEY"
         const val VERSION = "Debug"
 

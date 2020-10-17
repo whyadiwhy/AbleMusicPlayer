@@ -85,15 +85,14 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.afollestad.material-dialogs:bottomsheets:3.3.0'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
-    implementation 'com.flurry.android:analytics:12.7.0@aar'
     implementation 'com.makeramen:roundedimageview:2.3.0'
-    implementation 'androidx.preference:preference:1.1.1'
+    implementation 'androidx.preference:preference-ktx:1.1.1'
     implementation 'com.takisoft.preferencex:preferencex:1.1.0'
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
     implementation 'androidx.tonyodev.fetch2:xfetch2:3.1.5'
     implementation 'androidx.work:work-runtime:2.4.0'
-    implementation 'androidx.palette:palette:1.0.0'
+    implementation 'androidx.palette:palette-ktx:1.0.0'
     implementation 'com.github.maxbruecken:jaudiotagger-android:995dd88554'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9"
